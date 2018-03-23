@@ -1,4 +1,4 @@
-/**
+package view; /**
  * Autor: Hugo Teixeira Mafra
  * Matricula:
  * Inicio: 12/02/2018
@@ -10,10 +10,8 @@
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class RepresentacaoGraficaMeioDeTransmissao extends JPanel{
+public class MeioDeTransmissaoPanel extends JPanel {
     public static String[] bits; // Bits que irao ser representados como String
     public static String[] manchesterBits; // Bits que irao ser representados como String
     public static String[] manchesterDiferencialBits; // Bits que irao ser representados como String
@@ -35,19 +33,19 @@ public class RepresentacaoGraficaMeioDeTransmissao extends JPanel{
     private int STREAM_X2 = 0; // Plota a posicao dos bits em cima das linhas
 
     /**
-     * Metodo: RepresentacaoGraficaMeioDeTransmissao
+     * Metodo: view.MeioDeTransmissaoPanel
      * Funcao: construtor da classe. Define o background do painel como branco
      */
-    public RepresentacaoGraficaMeioDeTransmissao() {
-        super();
+    public MeioDeTransmissaoPanel() {
+        setLayout(null);
         setBackground(Color.WHITE);
     }
 
-    public int getEncodingTechnique() {
+    public int getTecnicaCodificacao() {
         return this.tipoDeCodificacao;
     }
 
-    public void setEncodingTechnique(int technique) {
+    public void setTecnicaCodificacao(int technique) {
         this.tipoDeCodificacao = technique;
     }
 
@@ -80,15 +78,15 @@ public class RepresentacaoGraficaMeioDeTransmissao extends JPanel{
                 repaint();
                 break;
             case MANCHESTER:
-                desenhaVoltPositivo(g2);
-                desenhaVoltNegativo(g2);
-                meioDeTransmissaoCodificacaoManchester(g2);
+//                desenhaVoltPositivo(g2);
+//                desenhaVoltNegativo(g2);
+//                meioDeTransmissaoCodificacaoManchester(g2);
                 repaint();
                 break;
             case MANCHESTER_DIFERENCIAL:
-                desenhaVoltPositivo(g2);
-                desenhaVoltNegativo(g2);
-                meioDeTransmissaoCodificacaoManchesterDiferencial(g2);
+//                desenhaVoltPositivo(g2);
+//                desenhaVoltNegativo(g2);
+//                meioDeTransmissaoCodificacaoManchesterDiferencial(g2);
                 repaint();
                 break;
             default:
@@ -100,7 +98,7 @@ public class RepresentacaoGraficaMeioDeTransmissao extends JPanel{
      * Metodo: desenhaVoltPositivo
      * Funcao: desenha o volt positivo no painel.
      *
-     * @param g2
+     * @param
      * @return void
      */
     public void desenhaVoltPositivo(Graphics2D g2) {
@@ -115,22 +113,22 @@ public class RepresentacaoGraficaMeioDeTransmissao extends JPanel{
      * Metodo: desenhaVoltNegativo
      * Funcao: desenha o volt negativo no painel
      *
-     * @param g2
+     * @param
      * @return void
      */
-    public void desenhaVoltNegativo(Graphics2D g2) {
-        g2.setFont(new Font("Arial", Font.PLAIN, 10));
-        g2.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
-                30.0f, new float[]{8.0f}, 0.0f));
-        g2.drawString("-0,85V", STREAM_X - 40, this.SINAL_NEGATIVO_Y);
-        g2.drawLine(STREAM_X, this.SINAL_NEGATIVO_Y, STREAM_X2, this.SINAL_NEGATIVO_Y);
+    public void desenhaVoltNegativo(Graphics g) {
+        g.setFont(new Font("Arial", Font.PLAIN, 10));
+//        g.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
+//                30.0f, new float[]{8.0f}, 0.0f));
+        g.drawString("-0,85V", STREAM_X - 40, this.SINAL_NEGATIVO_Y);
+        g.drawLine(STREAM_X, this.SINAL_NEGATIVO_Y, STREAM_X2, this.SINAL_NEGATIVO_Y);
     } // Fim do metodo desenhaVoltNegativo
 
     /**
      * Metodo: meioDeTransmissaoCodificacaoBinaria
      * Funcao: realiza o desenhos das linhas da codificacao binaria
      *
-     * @param g2
+     * @param
      * @return void
      */
     public void meioDeTransmissaoCodificacaoBinaria(Graphics2D g2) {
@@ -308,8 +306,7 @@ public class RepresentacaoGraficaMeioDeTransmissao extends JPanel{
      * @return void
      */
     public void desenhaLinhasDoClock(Graphics2D g2) {
-        g2.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
-                30.0f, new float[]{8.0f}, 0.0f));
+//        g2.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,30.0f, new float[]{8.0f}, 0.0f));
 
         StringBuilder sb = new StringBuilder();
         String s1 = "";
@@ -372,4 +369,4 @@ public class RepresentacaoGraficaMeioDeTransmissao extends JPanel{
             }
         }
     } // Fim do metodo desenhaLinhasDoClock
-} // Fim do classe RepresentacaoGraficaMeioDeTransmissao
+} // Fim do classe view.MeioDeTransmissaoPanel
