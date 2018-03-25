@@ -1,25 +1,25 @@
 package model;
 
-import controller.Aplicacao;
+import controller.AplicacaoTransmissoraController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class CamadaEnlaceDeDadosReceptora {
-    private Aplicacao aplicacao = new Aplicacao();
-    private CamadaAplicacaoReceptora aplicacaoReceptora = new CamadaAplicacaoReceptora();
 
-    protected void receberQuadrosEnquadrados(int[] quadro) {
+    protected static void receberQuadrosEnquadrados(int[] quadro) {
+        CamadaAplicacaoReceptoraModel aplicacaoReceptoraModel = new CamadaAplicacaoReceptoraModel();
+
         int[] quadroEnquadrado = camadaEnlaceDadosReceptoraEnquadramento(quadro);
-
         System.out.println("Imprimindo quadro desenquadrado: " + Arrays.toString(quadroEnquadrado));
 
-        aplicacaoReceptora.decodificarCaracteres(quadroEnquadrado);
+        aplicacaoReceptoraModel.decodificarCaracteres(quadroEnquadrado);
     }
 
-    private int[] camadaEnlaceDadosReceptoraEnquadramento(int[] quadro) {
+    private static int[] camadaEnlaceDadosReceptoraEnquadramento(int[] quadro) {
         int[] quadroDesenquadrado = new int[0];
-        switch (aplicacao.tipoDeEnquadramento) {
+        switch (AplicacaoTransmissoraController.tipoDeEnquadramento) {
             case 0:
                 quadroDesenquadrado = camadaEnlaceDadosReceptoraEnquadramentoContagemDeCaracteres(quadro);
                 break;
@@ -42,12 +42,12 @@ public class CamadaEnlaceDeDadosReceptora {
      * @param quadro
      * @return
      */
-    private int[] camadaEnlaceDadosReceptoraEnquadramentoContagemDeCaracteres(int[] quadro) {
+    private static int[] camadaEnlaceDadosReceptoraEnquadramentoContagemDeCaracteres(int[] quadro) {
         System.out.print("\nCamada Enlace Dados Receptora Enquadramento Contagem De Caracteres\n");
         int[] quadroDesenquadrado;
         int aux = 0;
 
-        ArrayList<Integer> arrayList = new ArrayList<>();
+        List<Integer> arrayList = new ArrayList<>();
         while (aux < quadro.length) {
             int letras = 0;
             int indexAux = quadro[aux] - 1;
@@ -75,13 +75,13 @@ public class CamadaEnlaceDeDadosReceptora {
      * @param quadro
      * @return
      */
-    public int[] camadaEnlaceDadosReceptoraEnquadramentoInsercaoDeCaracteres(int[] quadro) {
+    private static int[] camadaEnlaceDadosReceptoraEnquadramentoInsercaoDeCaracteres(int[] quadro) {
         System.out.print("\nCamada Enlace Dados Receptora Enquadramento Insercao De Caracteres\n");
 
         int[] quadroDesenquadrado;
         int x = 0;
 
-        ArrayList<Integer> arrayList = new ArrayList<>();
+        List<Integer> arrayList = new ArrayList<>();
         while (x < quadro.length) {
             if (quadro[x] == 33 || x == 0) {
                 if (quadro[x] == 33) {
@@ -111,8 +111,6 @@ public class CamadaEnlaceDeDadosReceptora {
             quadroDesenquadrado[y] = arrayList.get(0);
             arrayList.remove(0);
         }
-
-        System.out.println("\ndsgsdgsdgsdgsdgsgsgs: " + Arrays.toString(quadroDesenquadrado));
 
         return quadroDesenquadrado;
     }

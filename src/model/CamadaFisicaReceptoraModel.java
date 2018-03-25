@@ -1,11 +1,9 @@
 package model;
 
-import view.MeioDeTransmissaoPanel;
 
-public class CamadaFisicaReceptora {
-    private MeioDeTransmissaoPanel meioDeTransmissaoPanel = new MeioDeTransmissaoPanel();
-    private CamadaFisicaReceptora fisicaReceptora = new CamadaFisicaReceptora();
-    private CamadaEnlaceDeDadosReceptora enlaceDeDadosReceptora = new CamadaEnlaceDeDadosReceptora();
+import view.PainelMeioDeTransmissao;
+
+public class CamadaFisicaReceptoraModel {
 
     /**
      * Metodo: escolherTipoDeDecodificacao
@@ -15,26 +13,26 @@ public class CamadaFisicaReceptora {
      * @param fluxoBrutoDeBits
      * @return void
      */
-    protected void escolherTipoDeDecodificacao(int[] fluxoBrutoDeBits) {
+    protected static void escolherTipoDeDecodificacao(int[] fluxoBrutoDeBits) {
         System.out.print("\nCamada Fisica Receptora\n");
         final int BINARY = 1, MANCHESTER = 2, MANCHESTER_DIFERENCIAL = 3;
 
         int[] quadro = new int[0];
-        switch (meioDeTransmissaoPanel.getTecnicaCodificacao()) {
+        switch (PainelMeioDeTransmissao.tipoDeCodificacao) {
             case BINARY:
-                quadro = fisicaReceptora.decodificarBinario(fluxoBrutoDeBits);
+                quadro = decodificarBinario(fluxoBrutoDeBits);
                 break;
             case MANCHESTER:
-                quadro = fisicaReceptora.decodificarManchester(fluxoBrutoDeBits);
+                quadro = decodificarManchester(fluxoBrutoDeBits);
                 break;
             case MANCHESTER_DIFERENCIAL:
-                quadro = fisicaReceptora.decodificarManchesterDiferencial(fluxoBrutoDeBits);
+                quadro = decodificarManchesterDiferencial(fluxoBrutoDeBits);
                 break;
             default:
                 break;
         } // Fim do switch/case
 
-        enlaceDeDadosReceptora.receberQuadrosEnquadrados(quadro); // chama a proxima camada
+        CamadaEnlaceDeDadosReceptora.receberQuadrosEnquadrados(quadro); // chama a proxima camada
     } // Fim do metodo escolherTipoDeDecodificacao
 
     /**
@@ -44,7 +42,7 @@ public class CamadaFisicaReceptora {
      * @param fluxoBrutoDeBits
      * @return int[]
      */
-    private int[] decodificarBinario(int[] fluxoBrutoDeBits) {
+    private static int[] decodificarBinario(int[] fluxoBrutoDeBits) {
         System.out.print("\nCamada Fisica Receptora Decodificacao Binaria\n");
         int[] quadro = new int[fluxoBrutoDeBits.length * 4];
 
@@ -92,7 +90,7 @@ public class CamadaFisicaReceptora {
      * @param fluxoBrutoDeBits
      * @return int[]
      */
-    public int[] decodificarManchester(int[] fluxoBrutoDeBits) {
+    private static int[] decodificarManchester(int[] fluxoBrutoDeBits) {
         System.out.print("\nCamada Fisica Receptora Decodificacao Manchester\n");
         int[] quadro = new int[fluxoBrutoDeBits.length * 2];
 
@@ -102,6 +100,7 @@ public class CamadaFisicaReceptora {
         int i = 31;
 
         String n = "" + fluxoBrutoDeBits[fluxoBrutoDeBits.length - 1];
+
         if (n.length() <= 6) {
             i = 15;
         }
@@ -141,7 +140,7 @@ public class CamadaFisicaReceptora {
      * @param fluxoBrutoDeBits
      * @return int[]
      */
-    private int[] decodificarManchesterDiferencial(int[] fluxoBrutoDeBits) {
+    private static int[] decodificarManchesterDiferencial(int[] fluxoBrutoDeBits) {
         System.out.print("\nCamada Fisica Receptora Decodificacao Manchester Diferencial\n");
         int[] quadro = new int[fluxoBrutoDeBits.length * 2];
 

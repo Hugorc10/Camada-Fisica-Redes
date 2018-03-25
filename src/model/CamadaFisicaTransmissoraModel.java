@@ -1,112 +1,8 @@
 package model;
 
-import controller.Aplicacao;
-import view.FramePrincipal;
-import view.MeioDeTransmissaoPanel;
-
-import javax.swing.*;
 import java.util.Arrays;
-import java.util.concurrent.LinkedBlockingQueue;
 
-public class CamadaFisicaTransmissora {
-    private FramePrincipal framePrincipal = new FramePrincipal();
-    private Aplicacao aplicacao = new Aplicacao();
-    private MeioDeTransmissao meioDeTransmissao = new MeioDeTransmissao();
-    private MeioDeTransmissaoPanel meioDeTransmissaoPanel = new MeioDeTransmissaoPanel();
-
-    protected void enviarQuadrosEnquadrados(int[] quadroEnquadrado) {
-        System.out.print("\nCamada Fisica Transmissora\n");
-        aplicacao.clear = true; // Impede de limpar a tela
-        LinkedBlockingQueue<int[]> arrayQueue = new LinkedBlockingQueue<>();
-        int[] fluxoBrutoDeBits = new int[0];
-
-        if (FramePrincipal.binarioRadioButton.isSelected()) {
-            try {
-                aplicacao.limparTela();
-                aplicacao.clear = false;
-
-                for (int i = 0; i < codificarParaBinario(quadroEnquadrado).length; i++) {
-                    arrayQueue.put(codificarParaBinario(quadroEnquadrado));
-                }
-
-                fluxoBrutoDeBits = arrayQueue.poll();
-
-                meioDeTransmissaoPanel.bits = new String[fluxoBrutoDeBits.length];
-                for (int i = 0; i < fluxoBrutoDeBits.length; i++)
-                    meioDeTransmissaoPanel.bits[i] = Integer.toBinaryString(fluxoBrutoDeBits[i]);
-
-                meioDeTransmissaoPanel.setTecnicaCodificacao(meioDeTransmissaoPanel.BINARIO);
-
-                for (String s : meioDeTransmissaoPanel.bits)
-                    framePrincipal.bitsTextArea.append(s);
-
-                System.out.print("Imprimindo bits receptor: " + Arrays.toString(meioDeTransmissaoPanel.bits) + "\n");
-            } catch (NumberFormatException e1) {
-                JOptionPane.showMessageDialog(null, "Entrada Invalida", "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(null, "Excecao Desconhecida Ocorreu", "Exception", JOptionPane.ERROR_MESSAGE);
-            }
-        } else if (FramePrincipal.manchesterRadioButton.isSelected()) {
-            try {
-                meioDeTransmissaoPanel.revalidate();
-                meioDeTransmissaoPanel.repaint();
-
-                aplicacao.limparTela();
-                meioDeTransmissaoPanel.clear = false;
-
-                fluxoBrutoDeBits = codificarParaManchester(quadroEnquadrado);
-
-                meioDeTransmissaoPanel.manchesterBits = new String[fluxoBrutoDeBits.length];
-                for (int i = 0; i < fluxoBrutoDeBits.length; i++) {
-                    meioDeTransmissaoPanel.manchesterBits[i] = Integer.toBinaryString(fluxoBrutoDeBits[i]);
-                }
-
-                meioDeTransmissaoPanel.setTecnicaCodificacao(meioDeTransmissaoPanel.MANCHESTER);
-
-                for (String s : meioDeTransmissaoPanel.manchesterBits)
-                    framePrincipal.bitsTextArea.append(s);
-
-            } catch (NumberFormatException e1) {
-                JOptionPane.showMessageDialog(null, "Entrada Invalida", "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(null,
-                        "Excecao Desconhecida Ocorreu",
-                        "Exception",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        } else if (FramePrincipal.manchesterDiferencialRadioButton.isSelected()) {
-            try {
-                meioDeTransmissaoPanel.revalidate();
-                meioDeTransmissaoPanel.repaint();
-
-                aplicacao.limparTela();
-                meioDeTransmissaoPanel.clear = false;
-
-                fluxoBrutoDeBits = codificarParaManchesterDiferencial(quadroEnquadrado);
-
-                meioDeTransmissaoPanel.manchesterDiferencialBits = new String[fluxoBrutoDeBits.length];
-                for (int i = 0; i < fluxoBrutoDeBits.length; i++) {
-                    meioDeTransmissaoPanel.manchesterDiferencialBits[i] = Integer.toBinaryString(fluxoBrutoDeBits[i]);
-                }
-
-                meioDeTransmissaoPanel.setTecnicaCodificacao(meioDeTransmissaoPanel.MANCHESTER_DIFERENCIAL);
-                meioDeTransmissaoPanel.repaint();
-
-                for (String s : meioDeTransmissaoPanel.manchesterDiferencialBits)
-                    framePrincipal.bitsTextArea.append(s);
-            } catch (NumberFormatException e1) {
-                JOptionPane.showMessageDialog(null, "Entrada Invalida", "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(null,
-                        "Excecao Desconhecida Ocorreu",
-                        "Exception",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        }
-
-        meioDeTransmissao.transmitirFluxoDeBits(fluxoBrutoDeBits);
-    }
-
+public class CamadaFisicaTransmissoraModel {
 
     /**
      * Metodo: codificarParaBinario
@@ -158,7 +54,7 @@ public class CamadaFisicaTransmissora {
      * @param quadro = array de bytes contendo codigos ASCII de cada caracter alfabetico
      * @return int[]
      */
-    private int[] codificarParaManchester(int[] quadro) {
+    public static int[] codificarParaManchester(int[] quadro) {
         System.out.print("\nCamada Fisica Transmissora Codificacao Manchester\n");
 
         // Variavel que ira receber o comprimento (length) do array "quadro" dividido por dois
@@ -205,7 +101,7 @@ public class CamadaFisicaTransmissora {
      * @param quadro = array de bytes contendo codigos ASCII de cada caracter alfabetico
      * @return int[]
      */
-    private int[] codificarParaManchesterDiferencial(int[] quadro) {
+    public static int[] codificarParaManchesterDiferencial(int[] quadro) {
         System.out.println("\nCamada Fisica Transmissora Codificacao Manchester Diferencial\n");
 
         // Variavel que ira receber o comprimento (length) do array "quadro" dividido por dois

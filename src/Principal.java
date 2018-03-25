@@ -17,12 +17,12 @@ public class Principal {
 
     // Metodo main
     public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
+        // Schedule a job for the event-dispatching thread:
         // Creating and showing this application's GUI.
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new FramePrincipal(); // Instancia da classe Principal
+                FramePrincipal framePrincipal = new FramePrincipal(); // Instancia da classe Principal
             }
         });
     } // Fim do metodo main

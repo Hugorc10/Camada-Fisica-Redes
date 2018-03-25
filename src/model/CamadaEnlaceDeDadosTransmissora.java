@@ -1,32 +1,38 @@
 package model;
 
-import controller.Aplicacao;
+import controller.AplicacaoTransmissoraController;
+import controller.CamadaFisicaTransmissoraController;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Vector;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.List;
 
 public class CamadaEnlaceDeDadosTransmissora {
-    private Aplicacao aplicacao = new Aplicacao();
-    private CamadaFisicaTransmissora fisicaTransmissora = new CamadaFisicaTransmissora();
 
     /**
+     * Metodo: enviarQuadrosDesenquadrados
+     * Funcao:
      *
      * @param quadro
      */
     public void enviarQuadrosDesenquadrados(int[] quadro) {
-        System.out.print("\nCamada Enlace de Dados Transmissora");
+        System.out.print("\nEnviar Quadros Desenquadrados\n");
         int[] quadroEnquadrado = camadaEnlaceDadosTransmissoraEnquadramento(quadro);
-        System.out.print("\nImprimindo quadro enquadrado: " + Arrays.toString(quadroEnquadrado) + "\n");
+        System.out.print("Imprimindo Quadros Desenquadrados: " + Arrays.toString(quadroEnquadrado) + "\n");
 
         separarQuadros(quadroEnquadrado);
     }
 
+    /**
+     * Metodo: separarQuadros
+     * Funcao:
+     *
+     * @param quadroDesenquadrado
+     */
     private void separarQuadros(int[] quadroDesenquadrado) {
-        System.out.print("\nSend Frames");
-        LinkedBlockingQueue<Integer> arrayQueue = new LinkedBlockingQueue<>();
-        switch (aplicacao.tipoDeEnquadramento) {
+        System.out.print("\nSeparar Quadros\n");
+        switch (AplicacaoTransmissoraController.tipoDeEnquadramento) {
             case 0:
                 int x = 0;
                 int[] quadro;
@@ -45,43 +51,43 @@ public class CamadaEnlaceDeDadosTransmissora {
                         x++;
                     }
 
-                    fisicaTransmissora.enviarQuadrosEnquadrados(quadro);
+                    System.out.print("Imprimindo Quadro Enquadrado: " + Arrays.toString(quadro) + "\n");
+
+                    CamadaFisicaTransmissoraController.enviarQuadrosEnquadrados(quadro);
                 }
                 break;
             case 1:
                 x = 0;
                 int aux = 0;
 
-                Vector<Integer> vector = new Vector<>();
+                List<Integer> arrayList = new ArrayList<>();
                 while (aux < quadroDesenquadrado.length) {
                     int cont = 0;
                     if (quadroDesenquadrado[x] == 33) {
-                        vector.add(quadroDesenquadrado[x]);
+                        arrayList.add(quadroDesenquadrado[x]);
                         x++;
                         aux++;
                     }
 
-                    if (vector.size() < quadroDesenquadrado.length) {
-                        vector.add(quadroDesenquadrado[x]);
-                    } else {
-
+                    if (arrayList.size() < quadroDesenquadrado.length) {
+                        arrayList.add(quadroDesenquadrado[x]);
                     }
 
-                    while (quadroDesenquadrado[x] != 33 && vector.size() < quadroDesenquadrado.length) {
+                    while (quadroDesenquadrado[x] != 33 && arrayList.size() < quadroDesenquadrado.length) {
                         x++;
-                        vector.add(quadroDesenquadrado[x]);
+                        arrayList.add(quadroDesenquadrado[x]);
                     }
 
-                    quadro = new int[vector.size()];
+                    quadro = new int[arrayList.size()];
                     for (int y = 0; y < quadro.length; y++) {
-                        quadro[cont] = vector.firstElement();
-                        vector.remove(0);
+                        quadro[cont] = arrayList.get(0);
+                        arrayList.remove(0);
                         cont++;
                         aux++;
                     }
 
                     x++;
-                    fisicaTransmissora.enviarQuadrosEnquadrados(quadroDesenquadrado);
+                    CamadaFisicaTransmissoraController.enviarQuadrosEnquadrados(quadroDesenquadrado);
                 }
                 break;
             default:
@@ -91,7 +97,7 @@ public class CamadaEnlaceDeDadosTransmissora {
 
     private int[] camadaEnlaceDadosTransmissoraEnquadramento(int[] quadro) {
         int[] quadroEnquadrado = new int[0];
-        switch (aplicacao.tipoDeEnquadramento) {
+        switch (AplicacaoTransmissoraController.tipoDeEnquadramento) {
             case 0:
                 quadroEnquadrado = camadaDeEnlaceTransmissoraEnquadramentoContagemDeCaracteres(quadro);
                 break;

@@ -1,4 +1,4 @@
-package view; /**
+/**
  * Autor: Hugo Teixeira Mafra
  * Matricula:
  * Inicio: 12/02/2018
@@ -8,19 +8,24 @@ package view; /**
  * atraves da implementacao de tres tipos de codificacoes estudadas no livro de Redes de Computadores, do Tanenbaum
  */
 
+package view;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class MeioDeTransmissaoPanel extends JPanel {
+public class PainelMeioDeTransmissao extends JPanel {
+    public static int tipoDeCodificacao = 0; // Armazena o tipo de codificacao
+    public static boolean clear; // Armazena 'true' or 'false' para limpar ou nao a tela
+
     public static String[] bits; // Bits que irao ser representados como String
     public static String[] manchesterBits; // Bits que irao ser representados como String
     public static String[] manchesterDiferencialBits; // Bits que irao ser representados como String
-    public static boolean clear; // Armazena "true" or "false" para limpar ou nao a tela
-    public final int BINARIO = 1;
-    public final int MANCHESTER = 2;
-    public final int MANCHESTER_DIFERENCIAL = 3;
+
+    public static final int BINARIO = 1;
+    public static final int MANCHESTER = 2;
+    public static final int MANCHESTER_DIFERENCIAL = 3;
     /**
-     * Este conjunto de variaveis finais definidas para organizar a posicao dos desenhos
+     * Este conjunto de variaveis finais sao definidas para organizar a posicao dos desenhos
      * feitos no painel
      */
     private final int LARGURA_LINHA_CLOCK = 30; // Define a largura da linha do clock
@@ -29,24 +34,15 @@ public class MeioDeTransmissaoPanel extends JPanel {
     private final int SINAL_POSITIVO_Y = 70; // Posicao do eixo vertical que ira ficar o sinal positivo
     private final int SINAL_NEGATIVO_Y = 120; // Posicao do eixo vertical que ira ficar o sinal negativo
     private final int SINAL_ZERO_Y = 100; // Posicao do eixo vertiral que ira indicar o meio entre os dois sinais
-    private int tipoDeCodificacao = 0; // Armazena o tipo de codificacao
     private int STREAM_X2 = 0; // Plota a posicao dos bits em cima das linhas
 
     /**
-     * Metodo: view.MeioDeTransmissaoPanel
+     * Metodo: painelMeioDeTransmissao
      * Funcao: construtor da classe. Define o background do painel como branco
      */
-    public MeioDeTransmissaoPanel() {
-        setLayout(null);
-        setBackground(Color.WHITE);
-    }
-
-    public int getTecnicaCodificacao() {
-        return this.tipoDeCodificacao;
-    }
-
-    public void setTecnicaCodificacao(int technique) {
-        this.tipoDeCodificacao = technique;
+    public PainelMeioDeTransmissao() {
+//        super();
+        this.setBackground(Color.WHITE);
     }
 
     /**
@@ -62,32 +58,38 @@ public class MeioDeTransmissaoPanel extends JPanel {
         if (clear)
             return;
 
-        if (this.tipoDeCodificacao == 0)
+        if (tipoDeCodificacao == -1)
             return;
 
         Graphics2D g2 = (Graphics2D) g;
-        // Seta a qualidade de redenrizacao do desenho
+        // Seta a qualidade de renderizacao do desenho
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        desenhaLinhasDoClock(g2); // Desenha as linhas tracejadas do clock
+        desenharLinhasClock(g2); // Desenha as linhas tracejadas do clock
 
-        switch (this.tipoDeCodificacao) {
+        switch (tipoDeCodificacao) {
             case BINARIO:
-                desenhaVoltPositivo(g2); // Desenha volt positivo
-                desenhaVoltNegativo(g2); // Desenha volt negativo
-                meioDeTransmissaoCodificacaoBinaria(g2); // Desenha linhas da codificacao binaria
-                repaint();
+                // Desenha volt positivo
+                desenhaVoltPositivo(g2);
+                // Desenha volt negativo
+                desenhaVoltNegativo(g2);
+                // Desenha linhas da codificacao binaria
+                meioDeTransmissaoCodificacaoBinaria(g2);
                 break;
             case MANCHESTER:
-//                desenhaVoltPositivo(g2);
-//                desenhaVoltNegativo(g2);
-//                meioDeTransmissaoCodificacaoManchester(g2);
-                repaint();
+                // Desenha volt positivo
+                desenhaVoltPositivo(g2);
+                // Desenha volt negativo
+                desenhaVoltNegativo(g2);
+                // Desenha linhas da codificacao manchester
+                meioDeTransmissaoCodificacaoManchester(g2);
                 break;
             case MANCHESTER_DIFERENCIAL:
-//                desenhaVoltPositivo(g2);
-//                desenhaVoltNegativo(g2);
-//                meioDeTransmissaoCodificacaoManchesterDiferencial(g2);
-                repaint();
+                // Desenha volt positivo
+                desenhaVoltPositivo(g2);
+                // Desenha volt negativo
+                desenhaVoltNegativo(g2);
+                // Desenha linhas da codificacao manchester diferencial
+                meioDeTransmissaoCodificacaoManchesterDiferencial(g2);
                 break;
             default:
                 break;
@@ -116,12 +118,12 @@ public class MeioDeTransmissaoPanel extends JPanel {
      * @param
      * @return void
      */
-    public void desenhaVoltNegativo(Graphics g) {
-        g.setFont(new Font("Arial", Font.PLAIN, 10));
-//        g.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
-//                30.0f, new float[]{8.0f}, 0.0f));
-        g.drawString("-0,85V", STREAM_X - 40, this.SINAL_NEGATIVO_Y);
-        g.drawLine(STREAM_X, this.SINAL_NEGATIVO_Y, STREAM_X2, this.SINAL_NEGATIVO_Y);
+    public void desenhaVoltNegativo(Graphics2D g2) {
+        g2.setFont(new Font("Arial", Font.PLAIN, 10));
+        g2.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
+                30.0f, new float[]{8.0f}, 0.0f));
+        g2.drawString("-0,85V", STREAM_X - 40, this.SINAL_NEGATIVO_Y);
+        g2.drawLine(STREAM_X, this.SINAL_NEGATIVO_Y, STREAM_X2, this.SINAL_NEGATIVO_Y);
     } // Fim do metodo desenhaVoltNegativo
 
     /**
@@ -300,13 +302,14 @@ public class MeioDeTransmissaoPanel extends JPanel {
     } // Fim do metodo meioDeTransmissaoCodificacaoManchesterDiferencial
 
     /**
-     * Metodo: desenhaLinhasDoClock
+     * Metodo: desenharLinhasClock
      * Funcao: desenha as linhas tracejadas verticais e horizontais
      *
      * @return void
      */
-    public void desenhaLinhasDoClock(Graphics2D g2) {
-//        g2.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,30.0f, new float[]{8.0f}, 0.0f));
+    public void desenharLinhasClock(Graphics2D g2) {
+        g2.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER,
+                30.0f, new float[]{8.0f}, 0.0f));
 
         StringBuilder sb = new StringBuilder();
         String s1 = "";
@@ -368,5 +371,5 @@ public class MeioDeTransmissaoPanel extends JPanel {
                 x += this.LARGURA_LINHA_CLOCK;
             }
         }
-    } // Fim do metodo desenhaLinhasDoClock
-} // Fim do classe view.MeioDeTransmissaoPanel
+    } // Fim do metodo desenharLinhasClock
+} // Fim do classe view.painelMeioDeTransmissao
